@@ -2,7 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.18.0](https://github.com/tempestphp/tempest-framework/compare/v3.17.0..3.18.0)  —  2026-07-29
+## [3.19.0](https://github.com/tempestphp/tempest-framework/compare/v3.18.0..3.19.0)  —  2026-08-28
+
+### 🚀 Features
+
+- **command-bus**: add database and redis command repositories (#2247) ([8147499](https://github.com/tempestphp/tempest-framework/commit/814749918e9f52b8d6a4614baced3cf5b13a402b))
+- **database**: add simplePaginate() to SelectQueryBuilder (#2250) ([a31bbcd](https://github.com/tempestphp/tempest-framework/commit/a31bbcd4e9b619df48af987f383376a631d90f03))
+- **http**: client IP address behind trusted proxies (#2244) ([1ca888d](https://github.com/tempestphp/tempest-framework/commit/1ca888dfa6e65e359f95e1736d69f424fca13954))
+
+### 🐛 Bug fixes
+
+- **database**: handle empty nullable nested relations (#2261) ([07fb882](https://github.com/tempestphp/tempest-framework/commit/07fb882a540ee1a283810ae8bf97cf4d4a09bff2))
+- **http**: recursively map nested uploaded files (#2255) ([ae9c3e4](https://github.com/tempestphp/tempest-framework/commit/ae9c3e4d19b05346ff826f6a867e655460b14330))
+- **mapper**: preserve native scalar values (#2251) ([5d8e243](https://github.com/tempestphp/tempest-framework/commit/5d8e2430cfe7b6dda617172074d6f8f71f1d705d))
+
+
+## [3.18.0](https://github.com/tempestphp/tempest-framework/compare/v3.17.0..v3.18.0)  —  2026-07-29
 
 ### 🚀 Features
 
