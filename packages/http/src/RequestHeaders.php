@@ -14,13 +14,13 @@ use Traversable;
 final readonly class RequestHeaders implements ArrayAccess, IteratorAggregate
 {
     /**
-     * @param array<string, string> $headers
+     * @param array<string, mixed> $headers
      */
     public static function normalizeFromArray(array $headers): self
     {
         return new self(array_combine(
             array_map(strtolower(...), array_keys($headers)),
-            array_values(array_map(fn (mixed $value) => Str\parse($value), $headers)),
+            array_values(array_map(fn(mixed $value) => Str\parse($value), $headers)),
         ));
     }
 

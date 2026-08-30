@@ -39,7 +39,7 @@ function find_key(iterable $array, mixed $value, bool $strict = false): int|stri
         return $search === false ? null : $search; // Keep empty values but convert false to null
     }
 
-    return array_find_key($array, static fn ($item, $key) => $value($item, $key) === true);
+    return array_find_key($array, static fn($item, $key) => $value($item, $key) === true);
 }
 
 /**
@@ -217,7 +217,7 @@ function forget_values(array &$array, mixed $values): array
     $values = is_array($values) ? $values : [$values];
 
     foreach ($values as $value) {
-        if (is_null($key = array_find_key($array, fn (mixed $match) => $value === $match))) {
+        if (is_null($key = array_find_key($array, fn(mixed $match) => $value === $match))) {
             continue;
         }
 
@@ -346,12 +346,10 @@ function pluck(iterable $array, string $value, ?string $key = null): array
  *
  * @template TKey of array-key
  * @template TValue
- * @template TPrepended
  *
  * @param iterable<TKey,TValue> $array
- * @param TPrepended $values
  *
- * @return array<array-key, TValue|TPrepended>
+ * @return array<array-key, mixed>
  */
 function prepend(iterable $array, mixed ...$values): array
 {
@@ -369,12 +367,10 @@ function prepend(iterable $array, mixed ...$values): array
  *
  * @template TKey of array-key
  * @template TValue
- * @template TAppended
  *
  * @param iterable<TKey,TValue> $array
- * @param TAppended $values
  *
- * @return array<array-key, TValue|TAppended>
+ * @return array<array-key, mixed>
  */
 function append(iterable $array, mixed ...$values): array
 {
@@ -499,8 +495,8 @@ function unique(iterable $array, Closure|string|null $key = null, bool $shouldBe
  * @template TKey of array-key
  * @template TValue
  *
- * @param iterable<TKey,TValue> $array
- * @param array<TKey, TValue> ...$arrays
+ * @param array<TKey, TValue> $array
+ * @param array<array-key, TValue> ...$arrays
  *
  * @return array<TKey, TValue>
  */
@@ -531,8 +527,8 @@ function diff_keys(iterable $array, array ...$arrays): array
  * @template TKey of array-key
  * @template TValue
  *
- * @param iterable<TKey,TValue> $array
- * @param array<TKey, TValue> ...$arrays
+ * @param array<TKey, TValue> $array
+ * @param array<array-key, TValue> ...$arrays
  *
  * @return array<TKey, TValue>
  */
@@ -547,8 +543,8 @@ function intersect(iterable $array, array ...$arrays): array
  * @template TKey of array-key
  * @template TValue
  *
- * @param iterable<TKey,TValue> $array
- * @param array<TKey, TValue> ...$arrays
+ * @param iterable<TKey, TValue> $array
+ * @param array<TKey, mixed> ...$arrays
  *
  * @return array<TKey, TValue>
  */
@@ -636,7 +632,7 @@ function first(iterable $array, ?Closure $filter = null, mixed $default = null):
         return array_first($array) ?? $default;
     }
 
-    return array_find($array, static fn ($value, $key) => $filter($value, $key)) ?? $default;
+    return array_find($array, static fn($value, $key) => $filter($value, $key)) ?? $default;
 }
 
 /**
@@ -647,7 +643,7 @@ function first(iterable $array, ?Closure $filter = null, mixed $default = null):
  *
  * @param iterable<TKey,TValue> $array
  *
- * @return TValue
+ * @return TValue|null
  */
 function at(iterable $array, int $index, mixed $default = null): mixed
 {
@@ -687,7 +683,7 @@ function last(iterable $array, ?Closure $filter = null, mixed $default = null): 
         return array_last($array) ?? $default;
     }
 
-    return array_find(namespace\reverse($array), static fn ($value, $key) => $filter($value, $key)) ?? $default;
+    return array_find(namespace\reverse($array), static fn($value, $key) => $filter($value, $key)) ?? $default;
 }
 
 /**
@@ -806,7 +802,7 @@ function values(iterable $array): array
 function filter(iterable $array, ?Closure $filter = null): array
 {
     $result = [];
-    $filter ??= static fn (mixed $value, mixed $_) => ! in_array($value, [false, null], strict: true);
+    $filter ??= static fn(mixed $value, mixed $_) => ! in_array($value, [false, null], strict: true);
 
     foreach (to_array($array) as $key => $value) {
         if (! $filter($value, $key)) {
@@ -978,9 +974,9 @@ function contains(iterable $array, mixed $search): bool
     $array = to_array($array);
     $search = $search instanceof Closure
         ? $search
-        : static fn (mixed $value) => $value === $search;
+        : static fn(mixed $value) => $value === $search;
 
-    return array_any($array, static fn ($value, $key) => $search($value, $key));
+    return array_any($array, static fn($value, $key) => $search($value, $key));
 }
 
 /**
@@ -997,9 +993,9 @@ function contains(iterable $array, mixed $search): bool
 function every(iterable $array, ?Closure $callback = null): bool
 {
     $array = to_array($array);
-    $callback ??= static fn (mixed $value) => ! is_null($value);
+    $callback ??= static fn(mixed $value) => ! is_null($value);
 
-    return array_all($array, static fn (mixed $value, int|string $key) => $callback($value, $key));
+    return array_all($array, static fn(mixed $value, int|string $key) => $callback($value, $key));
 }
 
 /**
@@ -1093,7 +1089,7 @@ function undot(iterable $array): array
  *
  * @param iterable<TKey,TValue> $array
  *
- * @return array<string,mixed>
+ * @return array<array-key, mixed>
  */
 function dot(iterable $array, string $prefix = ''): array
 {
