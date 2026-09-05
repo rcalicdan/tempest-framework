@@ -91,7 +91,10 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction  --ignore-platform-reqs
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --ignore-platform-reqs
+
+      - name: Warm Up TypePHP Cache
+        run: php vendor/bin/typephp cache:warm
 
       - name: "Setup Redis"
         if: ${{ matrix.os != 'windows-latest' }}

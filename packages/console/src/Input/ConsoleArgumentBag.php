@@ -13,7 +13,7 @@ final class ConsoleArgumentBag
     /** @var ConsoleInputArgument[] */
     private(set) array $arguments = [];
 
-    /** @var string[] */
+    /** @var (string|null)[] */
     private array $path = [];
 
     /**
@@ -54,7 +54,7 @@ final class ConsoleArgumentBag
     {
         return array_any(
             array: $this->arguments,
-            callback: static fn ($argument) => array_any(
+            callback: static fn($argument) => array_any(
                 array: $names,
                 callback: $argument->matches(...),
             ),
@@ -63,7 +63,7 @@ final class ConsoleArgumentBag
 
     public function get(string $name): ?ConsoleInputArgument
     {
-        return array_find($this->arguments, static fn ($argument) => $argument->matches($name));
+        return array_find($this->arguments, static fn($argument) => $argument->matches($name));
     }
 
     public function findFor(ConsoleArgumentDefinition $argumentDefinition): ?ConsoleInputArgument

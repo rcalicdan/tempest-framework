@@ -43,14 +43,14 @@ if (class_exists(ConsoleCommand::class)) {
             }
 
             $caches = arr($this->container->getSingletons(CacheConfig::class))
-                ->map(fn ($_, string $key) => $this->container->get(Cache::class, $key === CacheConfig::class ? null : Str\after_last($key, '#')))
+                ->map(fn($_, string $key) => $this->container->get(Cache::class, $key === CacheConfig::class ? null : Str\after_last($key, '#')))
                 ->values();
 
             if ($internal) {
                 $this->console->header('Internal caches');
 
                 foreach ([ConfigCache::class, ViewCache::class, IconCache::class] as $cacheName) {
-                    /** @var Cache $cache */
+                    /** @var ConfigCache|ViewCache|IconCache $cache */
                     $cache = $this->container->get($cacheName);
 
                     $this->console->keyValue(

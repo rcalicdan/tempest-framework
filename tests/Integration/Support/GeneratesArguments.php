@@ -46,7 +46,7 @@ trait GeneratesArguments
             }
 
             $arguments = array_map(
-                callback: fn (ReflectionParameter $parameter) => $parameter->isDefaultValueAvailable()
+                callback: fn(ReflectionParameter $parameter) => $parameter->isDefaultValueAvailable()
                     ? $parameter->getDefaultValue()
                     : $this->generateArgument($parameter->getType()), // @phpstan-ignore-line argument.type doesn't take inheritance into account apparently
                 array: $reflectionMethod->getParameters(),
@@ -84,6 +84,7 @@ trait GeneratesArguments
             'iterable' => [],
             'array' => [],
             'bool' => true,
+            'mixed' => 'tempest',
             default => null,
         };
     }

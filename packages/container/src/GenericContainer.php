@@ -114,7 +114,7 @@ final class GenericContainer implements Container
 
         return array_filter(
             array: $singletons,
-            callback: static fn (mixed $_, string $key) => str_starts_with($key, "{$interface}#") || $key === $interface,
+            callback: static fn(mixed $_, string $key) => str_starts_with($key, "{$interface}#") || $key === $interface,
             mode: ARRAY_FILTER_USE_BOTH,
         );
     }
@@ -199,6 +199,7 @@ final class GenericContainer implements Container
     }
 
     /**
+     * @typephp-ignore
      * @template TClassName of object
      * @param class-string<TClassName> $className
      * @return TClassName
@@ -330,7 +331,7 @@ final class GenericContainer implements Container
         if ($initializerClass->getType()->matches(DynamicInitializer::class)) {
             $index = array_find_key(
                 array: $this->dynamicInitializers->getArrayCopy(),
-                callback: static fn (string $className) => $className === $initializerClass->getName(),
+                callback: static fn(string $className) => $className === $initializerClass->getName(),
             );
 
             unset($this->dynamicInitializers[$index]);
@@ -503,7 +504,7 @@ final class GenericContainer implements Container
                         ->asClass()
                         ->getReflection()
                         ->newLazyProxy(
-                            fn () => $this->get($property->getType()->getName(), $inject->tag),
+                            fn() => $this->get($property->getType()->getName(), $inject->tag),
                         ));
                 } else {
                     $property->set($instance, $this->get($property->getType()->getName(), $inject->tag));
@@ -515,7 +516,7 @@ final class GenericContainer implements Container
     }
 
     /**
-     * @return ParameterReflector[]
+     * @return list<mixed>
      */
     private function autowireDependencies(MethodReflector|FunctionReflector $method, array $parameters = []): array
     {
@@ -588,7 +589,7 @@ final class GenericContainer implements Container
             return $type
                 ->asClass()
                 ->getReflection()
-                ->newLazyProxy(fn () => $this->resolve(className: $type->getName(), tag: $tag));
+                ->newLazyProxy(fn() => $this->resolve(className: $type->getName(), tag: $tag));
         }
 
         // If we can successfully retrieve an instance
