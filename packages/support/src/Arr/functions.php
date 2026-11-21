@@ -297,11 +297,11 @@ function random(iterable $array, int $number = 1, bool $preserveKey = false): mi
  * Retrieves values from a given key in each sub-array of the current array.
  * Optionally, you can pass a second parameter to also get the keys following the same pattern.
  *
- * @template TItem of array<array-key,mixed>
+ * @template TItem
  * @template TValueKey of string
  * @template TIndexKey of string
  *
- * @param iterable<array-key,TItem> $array
+ * @param iterable<array-key, TItem> $array
  * @param string $value The key to assign the values from, support dot notation.
  * @param string|null $key The key to assign the keys from, support dot notation.
  * @phpstan-param TValueKey $value
@@ -309,8 +309,8 @@ function random(iterable $array, int $number = 1, bool $preserveKey = false): mi
  *
  * @return (
  *   $key is null
- *      ? list<(TValueKey is key-of<TItem> ? TItem[TValueKey]|null : mixed)>
- *      : array<array-key, (TValueKey is key-of<TItem> ? TItem[TValueKey]|null : mixed)>
+ *      ? list<(TItem is array<array-key, mixed> ? (TValueKey is key-of<TItem> ? TItem[TValueKey]|null : mixed) : mixed)>
+ *      : array<array-key, (TItem is array<array-key, mixed> ? (TValueKey is key-of<TItem> ? TItem[TValueKey]|null : mixed) : mixed)>
  * )
  */
 function pluck(iterable $array, string $value, ?string $key = null): array

@@ -9,7 +9,7 @@ use Tempest\Support\Arr\ImmutableArray;
 final readonly class WhereGroupStatement implements QueryStatement
 {
     /**
-     * @param ImmutableArray<WhereStatement> $conditions
+     * @param ImmutableArray<array-key, WhereStatement|WhereGroupStatement|WhereExistsStatement> $conditions
      */
     public function __construct(
         public ImmutableArray $conditions = new ImmutableArray(),
@@ -22,8 +22,8 @@ final readonly class WhereGroupStatement implements QueryStatement
         }
 
         $compiled = $this->conditions
-            ->map(fn (QueryStatement $condition) => $condition->compile($dialect))
-            ->filter(fn (string $condition) => $condition !== '');
+            ->map(fn(QueryStatement $condition) => $condition->compile($dialect))
+            ->filter(fn(string $condition) => $condition !== '');
 
         if ($compiled->isEmpty()) {
             return '';

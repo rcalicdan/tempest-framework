@@ -12,8 +12,8 @@ use function Tempest\Support\arr;
 final class CountStatement implements QueryStatement, HasWhereStatements
 {
     /**
-     * @param ImmutableArray<WhereStatement> $where
-     * @param ImmutableArray<JoinStatement> $joins
+     * @param ImmutableArray<array-key, WhereStatement|WhereGroupStatement|WhereExistsStatement> $where
+     * @param ImmutableArray<array-key, JoinStatement> $joins
      */
     public function __construct(
         public readonly TableDefinition $table,
@@ -44,8 +44,8 @@ final class CountStatement implements QueryStatement, HasWhereStatements
 
         if ($this->where->isNotEmpty()) {
             $query[] = 'WHERE ' . $this->where
-                ->map(fn (QueryStatement $where) => $where->compile($dialect))
-                ->filter(fn (string $compiled) => $compiled !== '')
+                ->map(fn(QueryStatement $where) => $where->compile($dialect))
+                ->filter(fn(string $compiled) => $compiled !== '')
                 ->implode(' ');
         }
 

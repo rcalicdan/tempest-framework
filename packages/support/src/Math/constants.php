@@ -10,7 +10,7 @@ use const NAN as PHP_NAN;
 /**
  * The value of `INFINITY` is `1 / 0` (positive infinity).
  *
- * @var int
+ * @var float
  */
 const INFINITY = INF;
 

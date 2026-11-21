@@ -87,11 +87,11 @@ trait ManipulatesArray
      * @param int $size The size of each chunk.
      * @param bool $preserveKeys Whether to preserve the keys of the original array.
      *
-     * @return static<array-key, static>
+     * @return ($preserveKeys is true ? static<int, static<TKey, TValue>> : static<int, static<int, TValue>>)
      */
     public function chunk(int $size, bool $preserveKeys = true): self
     {
-        return $this->createOrModify(array_map(fn (array $array) => new static($array), namespace\chunk($this->value, $size, $preserveKeys)));
+        return $this->createOrModify(array_map(fn(array $array) => new static($array), namespace\chunk($this->value, $size, $preserveKeys)));
     }
 
     /**
@@ -214,7 +214,11 @@ trait ManipulatesArray
     /**
      * Prepends the specified values to the array.
      *
-     * @return static<TKey, TValue>
+     * @template TAdded of mixed
+     *
+     * @param TAdded ...$values
+     *
+     * @return static<TKey|int, TValue|TAdded>
      */
     public function prepend(mixed ...$values): self
     {
@@ -224,7 +228,11 @@ trait ManipulatesArray
     /**
      * Appends the specified values to the instance.
      *
-     * @return static<TKey, TValue>
+     * @template TAdded of mixed
+     *
+     * @param TAdded ...$values
+     *
+     * @return static<TKey|int, TValue|TAdded>
      */
     public function append(mixed ...$values): self
     {
@@ -234,7 +242,11 @@ trait ManipulatesArray
     /**
      * Appends the specified value to the array.
      *
-     * @return static<TKey, TValue>
+     * @template TAdded of mixed
+     *
+     * @param TAdded $value
+     *
+     * @return static<TKey|int, TValue|TAdded>
      */
     public function add(mixed $value): self
     {
@@ -244,7 +256,11 @@ trait ManipulatesArray
     /**
      * @alias of `add`.
      *
-     * @return static<TKey, TValue>
+     * @template TAdded of mixed
+     *
+     * @param TAdded $value
+     *
+     * @return static<TKey|int, TValue|TAdded>
      */
     public function push(mixed $value): self
     {
@@ -287,7 +303,7 @@ trait ManipulatesArray
     /**
      * Returns a new instance of the array with only the items that are not present in any of the given arrays.
      *
-     * @param array<TKey, TValue>|static<TKey, TValue> ...$arrays
+     * @param array<array-key, TValue>|static<array-key, TValue> ...$arrays
      *
      * @return static<TKey, TValue>
      */
@@ -311,7 +327,7 @@ trait ManipulatesArray
     /**
      * Returns a new instance of the array with only the items that are present in all of the given arrays.
      *
-     * @param array<TKey, TValue>|static<TKey, TValue> ...$arrays
+     * @param array<array-key, TValue>|static<array-key, TValue> ...$arrays
      *
      * @return static<TKey, TValue>
      */
@@ -402,7 +418,11 @@ trait ManipulatesArray
      * Returns the item at the given index in the specified array.
      * @alias of `at()`
      *
-     * @return TValue
+     * @template TDefault
+     *
+     * @param TDefault $default
+     *
+     * @return TValue|TDefault
      */
     public function nth(int $index, mixed $default = null): mixed
     {
@@ -412,7 +432,11 @@ trait ManipulatesArray
     /**
      * Returns the item at the given index in the specified array.
      *
-     * @return TValue
+     * @template TDefault
+     *
+     * @param TDefault $default
+     *
+     * @return TValue|TDefault
      */
     public function at(int $index, mixed $default = null): mixed
     {
@@ -503,7 +527,7 @@ trait ManipulatesArray
      *
      * @param null|Closure(TValue $value, TKey $key): bool $filter
      *
-     * @return static<TKey, TValue>
+     * @return static<TKey, covariant TValue>
      */
     public function filter(?Closure $filter = null): self
     {
@@ -570,7 +594,7 @@ trait ManipulatesArray
     /**
      * Associates the given `$value` to the given `$key` on the instance.
      *
-     * @return static<TKey, TValue>
+     * @return static<array-key, mixed>
      */
     public function set(string $key, mixed $value): self
     {
@@ -580,7 +604,7 @@ trait ManipulatesArray
     /**
      * @alias of `set`
      *
-     * @return static<TKey, TValue>
+     * @return static<array-key, mixed>
      */
     public function put(string $key, mixed $value): self
     {
@@ -642,7 +666,7 @@ trait ManipulatesArray
     /**
      * Converts the dot-notation keys of the instance to a set of nested arrays.
      *
-     * @return static<TKey, TValue>
+     * @return static<array-key, mixed>
      */
     public function undot(): self
     {
@@ -652,7 +676,7 @@ trait ManipulatesArray
     /**
      * Returns a copy of the array that converts nested arrays to a single-dimension dot-notation array.
      *
-     * @return static<TKey, TValue>
+     * @return static<array-key, mixed>
      */
     public function dot(): self
     {
@@ -672,7 +696,7 @@ trait ManipulatesArray
      *
      * @param Closure(TValue, TKey): array-key $keyExtractor
      *
-     * @return static<array-key, array<TKey, TValue>>
+     * @return static<array-key, list<TValue>>
      */
     public function groupBy(Closure $keyExtractor): self
     {
@@ -697,9 +721,9 @@ trait ManipulatesArray
      *
      * @template TMapValue
      *
-     * @param  Closure(TValue, TKey): TMapValue[] $map
+     * @param Closure(TValue, TKey): array<array-key, TMapValue> $map
      *
-     * @return static<TKey, TMapValue>
+     * @return static<int, TMapValue>
      */
     public function flatMap(Closure $map, int|float $depth = 1): self
     {
